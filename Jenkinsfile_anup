@@ -1,0 +1,29 @@
+node ('master') {
+    if (SetEnv in ('BUILD'))
+    {
+    stage ('scm_checkout')
+    checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/s3s-tech/devops.git']]])
+    
+/*def $MAVEN_HOME= tool 'MAVEN'
+/*sh 'mvn -f sample-java/pom.xml clean install'
+*/
+
+stage ('scm_build')
+sh '/usr/local/Cellar/maven/3.5.0/libexec/bin/mvn -f sample-java/pom.xml clean install'
+
+stage ('archive_build')
+archiveArtifacts '**/target/*.war'
+
+echo "this build is complete....."
+}
+
+if (SetEnv in ('DEV')) {
+echo "deploying to dev env"
+}
+
+if (SetEnv in ("QA")) {
+echo "what is this??"    
+    
+}
+
+}
