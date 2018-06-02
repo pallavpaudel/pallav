@@ -1,0 +1,12 @@
+---
+- hosts: [slave]
+  remote_user: root 
+  tasks:
+  - name: Copy a ".war" file on the remote machine for tomcat deploye 
+    copy:
+      src: /apps/deploy/webappRunnerSample.war
+      dest: /usr/share/tomcat/webapps/webappRunnerSample.war
+      remote_src: yes
+  handlers:
+  - name: restart_tomcat
+    service: name=tomcat state=restarted
